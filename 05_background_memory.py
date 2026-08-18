@@ -54,13 +54,6 @@ profile_manager = create_memory_manager(
 #   - store = store
 #   This manager will automatically search existing memories, extract new ones,
 #   and update the store when invoked with a full conversation history.
-# ── SOLUTION ──────────────────────────────────────────────────────────────────
-# background_memory_manager = create_memory_store_manager(
-#     MODEL,
-#     namespace=("memories", USER_ID),
-#     store=store,
-# )
-# ──────────────────────────────────────────────────────────────────────────────
 
 
 def retrieve_memories(query: str) -> str:
@@ -68,14 +61,6 @@ def retrieve_memories(query: str) -> str:
     # TODO 3: Search the store for memories relevant to `query`.
     #   namespace = ("memories", USER_ID), limit = 5
     #   Format as a <relevant_memories> block.
-    # ── SOLUTION ────────────────────────────────────────────────────────────────
-    # results = store.search(("memories", USER_ID), query=query, limit=5)
-    # if not results:
-    #     return ""
-    # lines = "\n".join(f"  • {r.value}" for r in results)
-    # return f"\n\n<relevant_memories>\n{lines}\n</relevant_memories>"
-    # ────────────────────────────────────────────────────────────────────────────
-    return ""
 
 
 def flush_session(session_history: list) -> None:
@@ -85,9 +70,6 @@ def flush_session(session_history: list) -> None:
     print("\n(running background memory extraction...)")
     # TODO 4: Invoke background_memory_manager with the full session history.
     #   background_memory_manager.invoke({"messages": session_history})
-    # ── SOLUTION ────────────────────────────────────────────────────────────────
-    # background_memory_manager.invoke({"messages": session_history})
-    # ────────────────────────────────────────────────────────────────────────────
     print("(done)\n")
 
 
@@ -128,9 +110,6 @@ def chat() -> None:
             system_prompt += f"\n\n<student_profile>\n{lines}\n</student_profile>"
 
         # TODO 5: Retrieve relevant memories from the store and add to system_prompt.
-        # ── SOLUTION ────────────────────────────────────────────────────────────
-        # system_prompt += retrieve_memories(user_input)
-        # ────────────────────────────────────────────────────────────────────────
 
         response = model.invoke([{"role": "system", "content": system_prompt}, *history])
         reply = response.content

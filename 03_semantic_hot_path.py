@@ -64,17 +64,6 @@ def run_turn(model_with_tools, messages: list) -> tuple[str, list]:
     #   4. Loop until there are no more tool calls; then return (reply_text, updated_messages)
     #
     #   Hint: ToolMessage(content=str(result), tool_call_id=tc["id"])
-    # ── SOLUTION ────────────────────────────────────────────────────────────────
-    # while True:
-    #     response = model_with_tools.invoke(messages)
-    #     messages = [*messages, response]
-    #     if not response.tool_calls:
-    #         return response.content, messages
-    #     for tc in response.tool_calls:
-    #         tool = tools_by_name.get(tc["name"])
-    #         result = tool.invoke(tc["args"]) if tool else f"unknown tool: {tc['name']}"
-    #         messages = [*messages, ToolMessage(content=str(result), tool_call_id=tc["id"])]
-    # ────────────────────────────────────────────────────────────────────────────
 
     # Fallback (no tools wired up yet): plain invoke
     response = model_with_tools.invoke(messages)
@@ -87,25 +76,12 @@ def chat() -> None:
     profile_memories: list = []
 
     profile_manager = # TODO 3: Create the profile manager (from step 2) 
-    # ── SOLUTION ──────────────────────────────────────────────────────────────
-    #  profile_manager = create_memory_manager(
-    #     MODEL, schemas=[UserProfile],
-    #     instructions="Extract student profile info from the conversation.",
-    #     enable_inserts=False,
-    # )
-    # ──────────────────────────────────────────────────────────────────────────
 
     model_with_tools = # TODO 4: Bind memory tools to the model
     # Hint: use model.bind_tools(MEMORY_TOOLS) to create a new model_with_tools.
-    # ── SOLUTION ──────────────────────────────────────────────────────────────
-    #  model_with_tools = model.bind_tools(MEMORY_TOOLS)
-    # ──────────────────────────────────────────────────────────────────────────
 
     # TODO 5: Add a new command 'memory' to inspect the current contents of the store.
     # print("Study Buddy + Semantic Memory (hot path)  —  commands: ...")
-    # ── SOLUTION ──────────────────────────────────────────────────────────────
-    # print("Study Buddy + Semantic Memory (hot path)  —  commands: 'profile', 'memory','new', 'quit'\n")
-    # ──────────────────────────────────────────────────────────────────────────
 
     while True:
         user_input = input("You: ").strip()
@@ -122,28 +98,13 @@ def chat() -> None:
             continue
         # TODO 5 (continued): Add a new command 'memory' to inspect the current contents of the store.
         # Hint: Use store.search(("memories", USER_ID), query="", limit=20) to get the current items.
-        # ── SOLUTION ──────────────────────────────────────────────────────────────
-        # if user_input.lower() == "memory":
-        #     # Print the current contents of the store.
-        #     items = store.search(("memories", USER_ID), query="", limit=20)
-        #     for item in items:
-        #         print(f"  • {item.value}")
-        #     continue
-        # ──────────────────────────────────────────────────────────────────────────
 
         history.append({"role": "user", "content": user_input})
 
         system_prompt = # TODO 6: Build system prompt using the function we defined in the previous section
-        # ── SOLUTION ─────––––––––––––––––───────────────────────────────────
-        # system_prompt = build_system_prompt(profile_memories)
-        # ────────────────────────────────────────────────────────────────────
 
         # TODO 7: Run the turn with the model_with_tools and run_turn.
         # reply, messages = ...
-        # ── SOLUTION ────────────────────────────────────────────────────────
-        # messages = [{"role": "system", "content": system_prompt}, *history]
-        # reply, messages = run_turn(model_with_tools, messages)
-        # ────────────────────────────────────────────────────────────────────
 
         history.append({"role": "assistant", "content": reply})
         print(f"\nBuddy: {reply}\n")
