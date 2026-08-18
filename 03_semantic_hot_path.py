@@ -81,7 +81,7 @@ def chat() -> None:
     # Hint: use model.bind_tools(MEMORY_TOOLS) to create a new model_with_tools.
 
     # TODO 5: Add a new command 'memory' to inspect the current contents of the store.
-    # print("Study Buddy + Semantic Memory (hot path)  —  commands: ...")
+    # Hint: print("Study Buddy + Semantic Memory (hot path)  —  commands: ...")
 
     while True:
         user_input = input("You: ").strip()
@@ -104,7 +104,7 @@ def chat() -> None:
         system_prompt = # TODO 6: Build system prompt using the function we defined in the previous section
 
         # TODO 7: Run the turn with the model_with_tools and run_turn.
-        # reply, messages = ...
+        # Hint: reply, messages = ...
 
         history.append({"role": "assistant", "content": reply})
         print(f"\nBuddy: {reply}\n")

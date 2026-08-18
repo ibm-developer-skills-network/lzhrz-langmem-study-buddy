@@ -70,7 +70,7 @@ def retrieve_episodes(topic: str) -> str:
     """Search the episode store and format relevant past examples."""
     # TODO 10: Search the store (hint: use `store.search`) for past episodes related to `topic`.
     # Format the results as a <past_examples> block to inject into the prompt.
-    # namespace = ("episodes", USER_ID), query = topic
+    # Hint: namespace = ("episodes", USER_ID), query = topic
 
 
 def chat() -> None:
