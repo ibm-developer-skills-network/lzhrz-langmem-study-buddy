@@ -1,4 +1,3 @@
-ibm-watsonx-ai
 langmem
 langgraph
 langchain
@@ -6,4 +5,5 @@ langchain-anthropic
 langchain-openai
 python-dotenv
 pydantic
+pydantic_settings
 flask
