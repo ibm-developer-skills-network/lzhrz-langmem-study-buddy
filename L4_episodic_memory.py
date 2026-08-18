@@ -30,9 +30,10 @@ MODEL = init_chat_model(
     "gpt-5-nano",
     model_provider="openai",
     api_key=settings.OPENAI_API_KEY,
-    temperature=0,
     max_tokens=200,
+    reasoning_effort="minimal"
 )
+
 USER_ID = "student_1"
 BASE_SYSTEM_PROMPT = (
     "You are an encouraging study buddy. "
