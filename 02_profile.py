@@ -50,13 +50,7 @@ class UserProfile(BaseModel):
 #   - enable_inserts = False   ← one profile doc, always updated in place
 #   - Write instructions to extract student info from the conversation
 profile_manager = create_memory_manager(
-    MODEL,
-    schemas=[UserProfile],
-    instructions=(
-        "Extract information about the student from the conversation. "
-        "Update the profile with any new details; do not duplicate existing info."
-    ),
-    enable_inserts=False,
+    # TODO
 )
 
 
