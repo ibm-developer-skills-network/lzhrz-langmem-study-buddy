@@ -11,7 +11,7 @@ model's own self-reflection on the session rather than a user-provided rating.
 
 New concept: create_prompt_optimizer, trajectories, self-reflective feedback
 
-Run: python 05_prompt_optimization.py
+Run: python L5_prompt_optimization.py
 """
 import json
 from pathlib import Path
@@ -21,9 +21,9 @@ from ibm_watsonx_ai import Credentials, APIClient
 from config.settings import settings
 from langchain.chat_models import init_chat_model
 from langgraph.store.memory import InMemoryStore
-from 02_profile import UserProfile
-from 03_semantic_hot_path import run_turn
-from 04_episodic_memory import Episode, retrieve_episodes
+from L2_profile import UserProfile
+from L3_semantic_hot_path import run_turn
+from L4_episodic_memory import Episode, retrieve_episodes
 
 from langmem import create_memory_manager, create_manage_memory_tool, create_search_memory_tool, create_prompt_optimizer
 

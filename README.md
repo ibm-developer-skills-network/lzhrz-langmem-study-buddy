@@ -15,11 +15,11 @@ All steps need `OPENAI_API_KEY` (for the LLM). Steps 3–6 also use it for vecto
 
 | File | Feature |
 |------|---------|
-| `01_basic_chat.py` | Plain chat loop — no memory |
-| `02_profile.py` | User profile with `create_memory_manager` |
-| `03_semantic_hot_path.py` | Semantic memory via in-turn tool calls |
-| `04_episodic_memory.py` | Episodic memory from past explanations |
-| `05_prompt_optimization.py` | Autonomous prompt optimization |
+| `L1_basic_chat.py` | Plain chat loop — no memory |
+| `L2_profile.py` | User profile with `create_memory_manager` |
+| `L3_semantic_hot_path.py` | Semantic memory via in-turn tool calls |
+| `L4_episodic_memory.py` | Episodic memory from past explanations |
+| `L5_prompt_optimization.py` | Autonomous prompt optimization |
 
 ## How to use each file
 

@@ -4,7 +4,7 @@ Step 1: Basic Study Buddy — no memory.
 The agent answers questions but forgets everything when restarted.
 This is the baseline we'll improve in every subsequent step.
 
-Run: python 01_basic_chat.py
+Run: python L1_basic_chat.py
 """
 from ibm_watsonx_ai.foundation_models import ModelInference
 from ibm_watsonx_ai import Credentials, APIClient
