@@ -61,49 +61,43 @@ profile_manager = create_memory_manager(
 # thoughts (buddy's internal reasoning), action (how it explained), result (outcome/reaction)
 class Episode(BaseModel):
     """A record of one successful explanation interaction."""
-# ── SOLUTION ──────────────────────────────────────────────────────────────────
-#     topic: str = Field(..., description="Subject or concept being explained")
-#     observation: str = Field(..., description="Context — what the student asked or struggled with")
-#     thoughts: str = Field(..., description="Reasoning behind the chosen explanation approach")
-#     action: str = Field(..., description="How the buddy explained it (approach, analogy, example used)")
-#     result: str = Field(..., description="Student reaction and whether understanding improved")
-# ──────────────────────────────────────────────────────────────────────────────
+    topic: str = Field(..., description="Subject or concept being explained")
+    observation: str = Field(..., description="Context — what the student asked or struggled with")
+    thoughts: str = Field(..., description="Reasoning behind the chosen explanation approach")
+    action: str = Field(..., description="How the buddy explained it (approach, analogy, example used)")
+    result: str = Field(..., description="Student reaction and whether understanding improved")
 
 
-episode_manager = # TODO 9: Create an episode_manager using create_memory_manager.
-# ── SOLUTION ──────────────────────────────────────────────────────────────────
-# episode_manager = create_memory_manager(
-#     MODEL,
-#     schemas=[Episode],
-#     instructions=(
-#         "If the conversation contains a clear explanation exchange, extract it as an episode. "
-#         "Focus on what made the explanation effective. Only extract when there's genuine signal."
-#     ),
-#     enable_inserts=True,
-# )
-# ──────────────────────────────────────────────────────────────────────────────
+# TODO 9: Create an episode_manager using create_memory_manager.
+episode_manager = create_memory_manager(
+    MODEL,
+    schemas=[Episode],
+    instructions=(
+        "If the conversation contains a clear explanation exchange, extract it as an episode. "
+        "Focus on what made the explanation effective. Only extract when there's genuine signal."
+    ),
+    enable_inserts=True,
+)
 
 
 def retrieve_episodes(topic: str) -> str:
     """Search the episode store and format relevant past examples."""
     # TODO 10: Search the store (hint: use `store.search`) for past episodes related to `topic`.
     # Format the results as a <past_examples> block to inject into the prompt.
-    # namespace = ("episodes", USER_ID), query = topic
-    # ── SOLUTION ────────────────────────────────────────────────────────────────
-    # results = store.search(("episodes", USER_ID), query=topic, limit=2)
-    # if not results:
-    #     return ""
-    # examples = []
-    # for r in results:
-    #     e = r.value
-    #     examples.append(
-    #         f"Topic: {e.get('topic')}\n"
-    #         f"Situation: {e.get('observation')}\n"
-    #         f"What worked: {e.get('action')}\n"
-    #         f"Outcome: {e.get('result')}"
-    #     )
-    # return "\n\n<past_examples>\n" + "\n---\n".join(examples) + "\n</past_examples>"
-    # ────────────────────────────────────────────────────────────────────────────
+    # Hint: namespace = ("episodes", USER_ID), query = topic
+    results = store.search(("episodes", USER_ID), query=topic, limit=2)
+    if not results:
+        return ""
+    examples = []
+    for r in results:
+        e = r.value
+        examples.append(
+            f"Topic: {e.get('topic')}\n"
+            f"Situation: {e.get('observation')}\n"
+            f"What worked: {e.get('action')}\n"
+            f"Outcome: {e.get('result')}"
+        )
+    return "\n\n<past_examples>\n" + "\n---\n".join(examples) + "\n</past_examples>"
 
 
 def chat() -> None:
@@ -143,9 +137,7 @@ def chat() -> None:
             system_prompt += f"\n\n<student_profile>\n{lines}\n</student_profile>"
 
             # TODO 11: Retrieve relevant past episodes and append to system_prompt.
-            # ── SOLUTION ────────────────────────────────────────────────────────────
-            # system_prompt += retrieve_episodes(user_input)
-            # ────────────────────────────────────────────────────────────────────────
+            system_prompt += retrieve_episodes(user_input)
 
         messages = [{"role": "system", "content": system_prompt}, *history]
         reply, messages = run_turn(model_with_tools, messages)
@@ -162,13 +154,10 @@ def chat() -> None:
         # Call episode_manager.invoke with messages=history[-2:].
         # Then put each extracted episode into the store under ("episodes", USER_ID).
         # Hint: store.put(namespace, key, value) — use a unique key per episode.
-        # ── SOLUTION ────────────────────────────────────────────────────────────
-        # new_episodes = episode_manager.invoke({"messages": history[-2:]})
-        # for i, ep in enumerate(new_episodes):
-        #     key = f"ep_{len(history)}_{i}"
-        #     store.put(("episodes", USER_ID), key, ep.value)
-        # ────────────────────────────────────────────────────────────────────────
-
+        new_episodes = episode_manager.invoke({"messages": history[-2:]})
+        for i, ep in enumerate(new_episodes):
+            key = f"ep_{len(history)}_{i}"
+            store.put(("episodes", USER_ID), key, ep.value)
 
 if __name__ == "__main__":
     chat()

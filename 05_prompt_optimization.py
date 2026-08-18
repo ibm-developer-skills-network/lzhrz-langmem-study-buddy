@@ -69,9 +69,7 @@ episode_manager = create_memory_manager(
 optimizer = # TODO 13: Create a prompt optimizer using create_prompt_optimizer.
 # Hint: create_prompt_optimizer takes parameters 'model' and 'kind'
 # 'kind' has options "metaprompt", "gradient", "prompt_memory". Choose "metaprompt".
-# ── SOLUTION ──────────────────────────────────────────────────────────────────
-# optimizer = create_prompt_optimizer(MODEL, kind="metaprompt")
-# ──────────────────────────────────────────────────────────────────────────────
+optimizer = create_prompt_optimizer(MODEL, kind="metaprompt")
 
 
 def load_system_prompt() -> str:
@@ -106,27 +104,23 @@ def flush_session(model, session_history: list, system_prompt: str) -> str:
     #      and prompt=system_prompt
     #   3. The result has an "prompt" key — extract and return it
     #   4. Save the updated prompt with save_system_prompt()
-    # ── SOLUTION ────────────────────────────────────────────────────────────────
-    # feedback = self_reflect(model, session_history)
-    # print(f"(self-reflection: {feedback['self_reflection'][:160]}...)")
-    # print("(optimizing system prompt...)")
-    # result = optimizer.invoke({
-    #     "trajectories": [(session_history, feedback)],
-    #     "prompt": system_prompt,
-    # })
-    # updated_prompt = result["prompt"]
-    # save_system_prompt(updated_prompt)
-    # print(f"(prompt updated)\n")
-    # return updated_prompt
-    # ────────────────────────────────────────────────────────────────────────────
+    feedback = self_reflect(model, session_history)
+    print(f"(self-reflection: {feedback['self_reflection'][:160]}...)")
+    print("(optimizing system prompt...)")
+    result = optimizer.invoke({
+        "trajectories": [(session_history, feedback)],
+        "prompt": system_prompt,
+    })
+    updated_prompt = result["prompt"]
+    save_system_prompt(updated_prompt)
+    print(f"(prompt updated)\n")
+    return updated_prompt
 
 def chat() -> None:
     model = init_chat_model(MODEL)
     model_with_tools = model.bind_tools(MEMORY_TOOLS)
-    system_prompt = # TODO 15: Retrieve the system prompt from persistent storage.
-    # ── SOLUTION ────────────────────────────────────────────────────────────────
-    # system_prompt = load_system_prompt()
-    # ────────────────────────────────────────────────────────────────────────────
+    # TODO 15: Retrieve the system prompt from persistent storage.
+    system_prompt = load_system_prompt()
     history: list[dict] = []
     session_history: list[dict] = [] # new
     profile_memories: list = []
@@ -140,16 +134,12 @@ def chat() -> None:
             continue
         if user_input.lower() == "quit":
             # TODO 16: Flush the session and update the system prompt before quitting.
-            # ── SOLUTION ────────────────────────────────────────────────────────────────
-            # system_prompt = flush_session(model, session_history, system_prompt)
-            # ────────────────────────────────────────────────────────────────────────────
+            system_prompt = flush_session(model, session_history, system_prompt)
             break
         if user_input.lower() == "new":
             # TODO 17: Flush the session and update the system prompt & session history before starting a new conversation.
-            # ── SOLUTION ────────────────────────────────────────────────────────────────
-            # system_prompt = flush_session(model, session_history, system_prompt)
-            # session_history.clear()
-            # ────────────────────────────────────────────────────────────────────────────
+            system_prompt = flush_session(model, session_history, system_prompt)
+            session_history.clear()
             history.clear()
             print("--- New conversation ---\n")
             continue
