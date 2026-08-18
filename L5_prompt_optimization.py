@@ -16,8 +16,6 @@ Run: python L5_prompt_optimization.py
 import json
 from pathlib import Path
 from typing import Optional
-from ibm_watsonx_ai.foundation_models import ModelInference
-from ibm_watsonx_ai import Credentials, APIClient
 from config.settings import settings
 from langchain.chat_models import init_chat_model
 from langgraph.store.memory import InMemoryStore
@@ -27,11 +25,12 @@ from L4_episodic_memory import Episode, retrieve_episodes
 
 from langmem import create_memory_manager, create_manage_memory_tool, create_search_memory_tool, create_prompt_optimizer
 
-MODEL = ModelInference(
-    model_id="openai/gpt-5-nano",
-    credentials=credentials,
-    project_id="skills-network",
-    params={"temperature": 0, "max_tokens": 200},
+MODEL = init_chat_model(
+    "gpt-5-nano",
+    model_provider="openai",
+    api_key=settings.OPENAI_API_KEY,
+    temperature=0,
+    max_tokens=200,
 )
 USER_ID = "student_1"
 PROMPT_FILE = Path("system_prompt.json")   # persist the optimized prompt across runs
@@ -66,7 +65,7 @@ episode_manager = create_memory_manager(
     enable_inserts=True,
 )
 
-optimizer = # TODO 13: Create a prompt optimizer using create_prompt_optimizer.
+# TODO 13: Create a prompt optimizer using create_prompt_optimizer.
 # Hint: create_prompt_optimizer takes parameters 'model' and 'kind'
 # 'kind' has options "metaprompt", "gradient", "prompt_memory". Choose "metaprompt".
 optimizer = create_prompt_optimizer(MODEL, kind="metaprompt")
@@ -117,7 +116,7 @@ def flush_session(model, session_history: list, system_prompt: str) -> str:
     return updated_prompt
 
 def chat() -> None:
-    model = init_chat_model(MODEL)
+    model = MODEL
     model_with_tools = model.bind_tools(MEMORY_TOOLS)
     # TODO 15: Retrieve the system prompt from persistent storage.
     system_prompt = load_system_prompt()

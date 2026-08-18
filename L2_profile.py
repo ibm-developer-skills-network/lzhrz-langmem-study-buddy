@@ -10,21 +10,17 @@ Key concept: create_memory_manager with enable_inserts=False
 Run: python L2_profile.py
 """
 from typing import Optional
-from ibm_watsonx_ai.foundation_models import ModelInference
-from ibm_watsonx_ai import Credentials, APIClient
 from config.settings import settings
 from langchain.chat_models import init_chat_model
 from langmem import create_memory_manager
 from pydantic import BaseModel, Field
 
-credentials = Credentials(url = "https://us-south.ml.cloud.ibm.com")
-client = APIClient(credentials)
-
-MODEL = ModelInference(
-    model_id="openai/gpt-5-nano",
-    credentials=credentials,
-    project_id="skills-network",
-    params={"temperature": 0, "max_tokens": 200},
+MODEL = init_chat_model(
+    "gpt-5-nano",
+    model_provider="openai",
+    api_key=settings.OPENAI_API_KEY,
+    temperature=0,
+    max_tokens=200,
 )
 
 BASE_SYSTEM_PROMPT = (
@@ -70,7 +66,6 @@ def build_system_prompt(profile_memories: list) -> str:
 
 
 def chat() -> None:
-    model = init_chat_model(MODEL)
     history: list[dict] = []
     profile_memories: list = []      # holds the single profile memory entry
 
@@ -91,7 +86,7 @@ def chat() -> None:
             continue
 
         history.append({"role": "user", "content": user_input})
-        response = model.invoke([
+        response = MODEL.invoke([
             {"role": "system", "content": build_system_prompt(profile_memories)},
             *history,
         ])
