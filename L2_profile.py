@@ -7,7 +7,7 @@ growing a list of separate entries.
 
 Key concept: create_memory_manager with enable_inserts=False
 
-Run: python 02_profile.py
+Run: python L2_profile.py
 """
 from typing import Optional
 from ibm_watsonx_ai.foundation_models import ModelInference

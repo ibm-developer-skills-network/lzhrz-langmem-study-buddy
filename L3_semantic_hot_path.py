@@ -10,8 +10,7 @@ The buddy now has two memory tools it can call *during* each conversation turn:
 New concepts: create_manage_memory_tool, create_search_memory_tool, InMemoryStore,
               tool-calling loop
 
-Requires OPENAI_API_KEY for vector embeddings.
-Run: python 03_semantic_hot_path.py
+Run: python L3_semantic_hot_path.py
 """
 from typing import Optional
 from ibm_watsonx_ai.foundation_models import ModelInference
@@ -22,7 +21,7 @@ from langchain_core.messages import ToolMessage
 from langmem import create_manage_memory_tool, create_search_memory_tool, create_memory_manager
 from langgraph.store.memory import InMemoryStore
 from pydantic import BaseModel, Field
-from 02_profile import UserProfile, build_system_prompt
+from L2_profile import UserProfile, build_system_prompt
 
 credentials = Credentials(url = "https://us-south.ml.cloud.ibm.com")
 client = APIClient(credentials)

@@ -13,7 +13,7 @@ system prompt when a similar topic comes up.
 
 New concepts: Episode schema, per-turn episode extraction, episode retrieval
 
-Run: python 04_episodic_memory.py
+Run: python L4_episodic_memory.py
 """
 from typing import Optional
 from ibm_watsonx_ai.foundation_models import ModelInference
@@ -23,8 +23,8 @@ from langchain.chat_models import init_chat_model
 from langchain_core.messages import ToolMessage
 from langgraph.store.memory import InMemoryStore
 from pydantic import BaseModel, Field
-from 02_profile import UserProfile
-from 03_semantic_hot_path import run_turn
+from L2_profile import UserProfile
+from L3_semantic_hot_path import run_turn
 
 from langmem import create_manage_memory_tool, create_search_memory_tool, create_memory_manager
 
