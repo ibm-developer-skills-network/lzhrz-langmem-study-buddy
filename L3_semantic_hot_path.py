@@ -13,8 +13,6 @@ New concepts: create_manage_memory_tool, create_search_memory_tool, InMemoryStor
 Run: python L3_semantic_hot_path.py
 """
 from typing import Optional
-from ibm_watsonx_ai.foundation_models import ModelInference
-from ibm_watsonx_ai import Credentials, APIClient
 from config.settings import settings
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import ToolMessage
@@ -23,14 +21,12 @@ from langgraph.store.memory import InMemoryStore
 from pydantic import BaseModel, Field
 from L2_profile import UserProfile, build_system_prompt
 
-credentials = Credentials(url = "https://us-south.ml.cloud.ibm.com")
-client = APIClient(credentials)
-
-MODEL = ModelInference(
-    model_id="openai/gpt-5-nano",
-    credentials=credentials,
-    project_id="skills-network",
-    params={"temperature": 0, "max_tokens": 200},
+MODEL = init_chat_model(
+    "gpt-5-nano",
+    model_provider="openai",
+    api_key=settings.OPENAI_API_KEY,
+    temperature=0,
+    max_tokens=200,
 )
 
 USER_ID = "student_1"
@@ -70,14 +66,13 @@ def run_turn(model_with_tools, messages: list) -> tuple[str, list]:
 
 
 def chat() -> None:
-    model = init_chat_model(MODEL)
     history: list[dict] = []
     profile_memories: list = []
 
     profile_manager = # TODO 3: Create the profile manager (from step 2) 
 
     model_with_tools = # TODO 4: Bind memory tools to the model
-    # Hint: use model.bind_tools(MEMORY_TOOLS) to create a new model_with_tools.
+    # Hint: use MODEL.bind_tools(MEMORY_TOOLS) to create a new model_with_tools.
 
     # TODO 5: Add a new command 'memory' to inspect the current contents of the store.
     # Hint: print("Study Buddy + Semantic Memory (hot path)  —  commands: ...")

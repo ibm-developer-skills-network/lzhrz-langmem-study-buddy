@@ -11,8 +11,6 @@ import json
 from pathlib import Path
 from flask import Flask, jsonify, render_template, request
 
-from ibm_watsonx_ai.foundation_models import ModelInference
-from ibm_watsonx_ai import Credentials, APIClient
 from config.settings import settings
 from langchain.chat_models import init_chat_model
 from langgraph.store.memory import InMemoryStore
@@ -22,11 +20,12 @@ from L4_episodic_memory import Episode, retrieve_episodes
 
 from langmem import create_memory_manager, create_manage_memory_tool, create_search_memory_tool, create_prompt_optimizer
 
-MODEL = ModelInference(
-    model_id="openai/gpt-5-nano",
-    credentials=credentials,
-    project_id="skills-network",
-    params={"temperature": 0, "max_tokens": 200},
+MODEL = init_chat_model(
+    "gpt-5-nano",
+    model_provider="openai",
+    api_key=settings.OPENAI_API_KEY,
+    temperature=0,
+    max_tokens=200,
 )
 USER_ID = "student_1"
 PROMPT_FILE = Path("system_prompt.json")   # persist the optimized prompt across runs
@@ -114,7 +113,7 @@ c = {}  # components
 
 
 def init() -> None:
-    c["model"] = init_chat_model(MODEL)
+    c["model"] = MODEL
     c["model_with_tools"] = c["model"].bind_tools(MEMORY_TOOLS)
     g["system_prompt"] = load_system_prompt()
 
