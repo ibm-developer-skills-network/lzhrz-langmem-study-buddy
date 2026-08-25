@@ -12,13 +12,11 @@ New concepts: create_manage_memory_tool, create_search_memory_tool, InMemoryStor
 
 Run: python L3_semantic_hot_path.py
 """
-from typing import Optional
 from config.settings import settings
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import ToolMessage
 from langmem import create_manage_memory_tool, create_search_memory_tool, create_memory_manager
 from langgraph.store.memory import InMemoryStore
-from pydantic import BaseModel, Field
 from L2_profile import UserProfile, build_system_prompt
 
 MODEL = init_chat_model(
