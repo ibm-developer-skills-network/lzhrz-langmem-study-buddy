@@ -15,10 +15,8 @@ New concepts: Episode schema, per-turn episode extraction, episode retrieval
 
 Run: python 04_episodic_memory.py
 """
-from typing import Optional
 from config.settings import settings
 from langchain.chat_models import init_chat_model
-from langchain_core.messages import ToolMessage
 from langgraph.store.memory import InMemoryStore
 from pydantic import BaseModel, Field
 from L2_profile import UserProfile
