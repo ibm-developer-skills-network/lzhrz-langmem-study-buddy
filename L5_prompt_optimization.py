@@ -15,7 +15,6 @@ Run: python L5_prompt_optimization.py
 """
 import json
 from pathlib import Path
-from typing import Optional
 from config.settings import settings
 from langchain.chat_models import init_chat_model
 from langgraph.store.memory import InMemoryStore
